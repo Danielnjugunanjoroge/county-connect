@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CountyConnect — Find Professionals</title>
+<style>
+  :root{--green:#0b6623;--muted:#6b7280}
+  body{font-family:Inter,system-ui,Arial;margin:0;padding-top:80px;background:linear-gradient(180deg,#f8fafc,#eef7ef);color:#111}
+  /* Navbar */
+  .navbar{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:8px 20px;background:linear-gradient(90deg,#000,#c00,#fff,#048000);color:#fff;z-index:999}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #fff}
+  .nav-links{display:flex;gap:14px;list-style:none;margin:0;padding:0}
+  .nav-links a{color:#fff;text-decoration:none;font-weight:600}
+  /* container */
+  .container{max-width:1000px;margin:30px auto;padding:18px}
+  .card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+  h1{color:var(--green)}
+  .form-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+  select,input{padding:10px;border-radius:8px;border:1px solid #d1d5db;font-size:15px;min-width:220px}
+  .btn{background:var(--green);color:#fff;padding:10px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:700}
+  .btn.secondary{background:transparent;color:var(--green);border:2px solid var(--green)}
+  /* footer */
+  footer.footer{background:#000;color:#fff;padding:30px 16px;margin-top:30px}
+  .footer-content{max-width:1100px;margin:auto;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between}
+  .footer-content img{width:48px;height:48px;border-radius:50%}
+  .footer-bottom{max-width:1100px;margin:auto;color:#ddd;padding-top:12px;border-top:1px solid #222;text-align:center}
+  @media(max-width:680px){.form-row{flex-direction:column}}
+</style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="image24.jpg">
+      <div style="font-weight:800">CountyConnect</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="hire.html">Hire</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <h1>Find a Professional</h1>
+      <p style="color:var(--muted)">Choose the county and profession you want to hire, then click <strong>Find Professionals</strong>.</p>
+
+      <div class="form-row" id="searchForm">
+  <select id="county" name="county" required>
+  <option value="">-- Select Your County --</option>
+  <option value="Baringo">Baringo</option>
+  <option value="Bomet">Bomet</option>
+  <option value="Bungoma">Bungoma</option>
+  <option value="Busia">Busia</option>
+  <option value="Elgeyo Marakwet">Elgeyo Marakwet</option>
+  <option value="Embu">Embu</option>
+  <option value="Garissa">Garissa</option>
+  <option value="Homa Bay">Homa Bay</option>
+  <option value="Isiolo">Isiolo</option>
+  <option value="Kajiado">Kajiado</option>
+  <option value="Kakamega">Kakamega</option>
+  <option value="Kericho">Kericho</option>
+  <option value="Kiambu">Kiambu</option>
+  <option value="Kilifi">Kilifi</option>
+  <option value="Kirinyaga">Kirinyaga</option>
+  <option value="Kisii">Kisii</option>
+  <option value="Kisumu">Kisumu</option>
+  <option value="Kitui">Kitui</option>
+  <option value="Kwale">Kwale</option>
+  <option value="Laikipia">Laikipia</option>
+  <option value="Lamu">Lamu</option>
+  <option value="Machakos">Machakos</option>
+  <option value="Makueni">Makueni</option>
+  <option value="Mandera">Mandera</option>
+  <option value="Marsabit">Marsabit</option>
+  <option value="Meru">Meru</option>
+  <option value="Migori">Migori</option>
+  <option value="Mombasa">Mombasa</option>
+  <option value="Murang'a">Murang'a</option>
+  <option value="Nairobi">Nairobi</option>
+  <option value="Nakuru">Nakuru</option>
+  <option value="Nandi">Nandi</option>
+  <option value="Narok">Narok</option>
+  <option value="Nyamira">Nyamira</option>
+  <option value="Nyandarua">Nyandarua</option>
+  <option value="Nyeri">Nyeri</option>
+  <option value="Samburu">Samburu</option>
+  <option value="Siaya">Siaya</option>
+  <option value="Taita Taveta">Taita Taveta</option>
+  <option value="Tana River">Tana River</option>
+  <option value="Tharaka Nithi">Tharaka Nithi</option>
+  <option value="Trans Nzoia">Trans Nzoia</option>
+  <option value="Turkana">Turkana</option>
+  <option value="Uasin Gishu">Uasin Gishu</option>
+  <option value="Vihiga">Vihiga</option>
+  <option value="Wajir">Wajir</option>
+  <option value="West Pokot">West Pokot</option>
+   <!-- Add all 47 counties -->
+</select>
+
+<label for="category">Select Category:</label>
+<select id="category" name="category" required onchange="updateProfessions()">
+  <option value="">-- Select Category --</option>
+  <option value="skilled">Skilled Trades</option>
+  <option value="technical">Technical & ICT</option>
+  <option value="engineering">Construction & Engineering</option>
+  <option value="education">Education & Training</option>
+  <option value="health">Medical & Health</option>
+  <option value="agriculture">Agriculture & Environment</option>
+  <option value="business">Business & Finance</option>
+  <option value="media">Media & Creative</option>
+  <option value="other">Other Professions</option>
+</select>
+
+<br><br>
+
+<label for="profession">Select Profession:</label>
+<select id="profession" name="profession" required>
+  <option value="">-- Select Profession --</option>
+</select>
+
+<script>
+  const professionOptions = {
+    skilled: [
+      "Plumber", "Electrician", "Mechanic", "Carpenter", "Welder", "Painter",
+      "Tailor / Fashion Designer", "Hairdresser / Barber", "Driver", "Chef / Cook",
+      "Waiter / Waitress", "Security Guard", "Cleaner / Janitor", "Gardener / Landscaper"
+    ],
+    technical: [
+      "Software Developer", "Web Developer", "Graphic Designer", "IT Technician",
+      "Network Engineer", "Data Analyst", "Cybersecurity Specialist", "Digital Marketer"
+    ],
+    engineering: [
+      "Civil Engineer", "Architect", "Surveyor", "Quantity Surveyor", "Project Manager"
+    ],
+    education: [
+      "Teacher", "Tutor", "Trainer", "Lecturer", "Education Consultant",
+      "Curriculum Developer", "Early Childhood Educator", "Special Needs Teacher"
+    ],
+    health: [
+      "Doctor", "Nurse", "Clinical Officer", "Pharmacist", "Lab Technician",
+      "Nutritionist", "Psychologist", "Physiotherapist", "Public Health Officer"
+    ],
+    agriculture: [
+      "Farmer", "Veterinarian", "Agricultural Officer", "Forester", "Environmental Officer"
+    ],
+    business: [
+      "Accountant", "Auditor", "Banker", "Sales Representative", "Marketing Executive",
+      "Business Consultant", "Human Resource Officer", "Customer Service Representative"
+    ],
+    media: [
+      "Photographer", "Videographer", "Journalist", "Content Creator", "Music Producer",
+      "DJ", "Artist", "Model", "Event Planner", "Graphic Designer"
+    ],
+    other: [
+      "Lawyer", "Legal Clerk", "Real Estate Agent", "Caterer", "Tour Guide",
+      "Translator", "Social Worker", "House Help"
+    ]
+  };
+
+  function updateProfessions() {
+    const category = document.getElementById("category").value;
+    const professionSelect = document.getElementById("profession");
+
+    // Clear existing options
+    professionSelect.innerHTML = '<option value="">-- Select Profession --</option>';
+
+    // Add new ones if category chosen
+    if (professionOptions[category]) {
+      professionOptions[category].forEach(prof => {
+        const opt = document.createElement("option");
+        opt.value = prof;
+        opt.textContent = prof;
+        professionSelect.appendChild(opt);
+      });
+    }
+  }
+</script>
+
+
+        <button id="findBtn" class="btn">Find Professionals</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <img src="image24.jpg">
+        <h3>CountyConnect</h3>
+        <p>Connecting Skills, Building Kenya 🇰🇪</p>
+      </div>
+      <div>
+        <h4 style="color:#ffcc00">Quick Links</h4>
+        <div><a href="index.html" style="color:#ddd;text-decoration:none">Home</a> • <a href="register.html" style="color:#ddd">Register</a></div>
+      </div>
+      <div>
+        <h4 style="color:#ffcc00">Follow</h4>
+        <div>
+          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145802.png" width="22" style="vertical-align:middle"></a>
+          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145805.png" width="22"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 CountyConnect. All rights reserved.</div>
+  </footer>
+
+<script>
+  document.getElementById('findBtn').addEventListener('click', () => {
+    const county = document.getElementById('county').value;
+    const profession = document.getElementById('profession').value;
+    if(!county || !profession){
+      alert('Please select a county and a profession to continue.');
+      return;
+    }
+    // save search filters and redirect to results page
+    localStorage.setItem('cc_search', JSON.stringify({county, profession}));
+    window.location.href = 'results.html';
+  });
+</script>
+</body>
+</html>
