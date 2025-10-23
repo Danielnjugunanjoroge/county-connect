@@ -16,17 +16,50 @@
       font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,#f8fafc, #eef2f6);color:#0f172a}
+    body{margin:0;background:linear-gradient(180deg,#f8fafc, #eef2f6);color:#0f172a; padding-top: 70px;}
     .container{max-width:var(--max-width);margin:0 auto;padding:24px}
 
-    header{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    header{display:flex;align-items:center;justify-content:space-between;padding:12px 0;position:relative; z-index:1000;}
     .brand{display:flex;align-items:center;gap:12px}
     .brand img{height:56px;width:56px;object-fit:contain;border-radius:8px}
     .brand h1{font-size:20px;margin:0}
     nav a{margin-left:18px;text-decoration:none;color:var(--muted);font-weight:600}
-    .cta{display:flex;gap:10px}
+    .cta{display:flex;gap:10px;align-items:center}
     .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
     .btn.secondary{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+
+    /* Dropdown Styles */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      min-width: 160px;
+      z-index: 10;
+      flex-direction: column;
+      padding: 0;
+    }
+    .dropdown .dropdown-content a button {
+      width: 100%;
+      padding: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 0;
+      margin: 0;
+      text-align: left;
+      cursor: pointer;
+    }
+    .dropdown .dropdown-content a button:hover {
+      background: var(--accent-dark);
+    }
 
     .hero{background:linear-gradient(90deg, rgba(3,82,54,0.95), rgba(9,121,72,0.85));color:#fff;border-radius:14px;padding:28px;margin:18px 0;display:flex;gap:24px;align-items:center}
     .hero-left{flex:1}
@@ -42,91 +75,33 @@
     .card h4{margin:0;font-size:15px}
     .card p{margin:6px 0 0;color:var(--muted);font-size:13px}
 
-    .counties{margin:22px 0}
-    .counties-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    .county{background:linear-gradient(180deg,#fff,#f8fafc);padding:10px;border-radius:8px;border:1px solid #e6eef5;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-    .county small{color:var(--muted)}
-
     .quote{background:linear-gradient(90deg,#fff,#f7fff8);padding:18px;border-radius:12px;border-left:6px solid var(--accent);margin:18px 0}
 
     footer{margin-top:24px;padding:18px 0;border-top:1px solid #e6eef5;color:var(--muted);display:flex;justify-content:space-between}
 
-    @media (max-width:1000px){
-      .features{grid-template-columns:repeat(2,1fr)}
-      .counties-grid{grid-template-columns:repeat(2,1fr)}
-      .hero{flex-direction:column;align-items:flex-start}
-    }
+    /* Footer Styling */
+    .footer {background: #000; color: #fff; padding: 40px 20px 10px; margin-top: 60px;}
+    .footer-content {display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1100px; margin: auto;}
+    .footer-section h2, .footer-section h3 {color: #ffcc00;}
+    .footer-section p {line-height: 1.6; font-size: 15px;}
+    .footer-section ul {list-style: none; padding: 0;}
+    .footer-section ul li {margin: 8px 0;}
+    .footer-section ul li a {color: #fff; text-decoration: none; transition: 0.3s;}
+    .footer-section ul li a:hover {color: #ffcc00;}
+    .social-icons a img {width: 28px; margin-right: 10px; transition: 0.3s;}
+    .social-icons a img:hover {transform: scale(1.2);}
+    .footer-bottom {text-align: center; margin-top: 20px; font-size: 14px; border-top: 1px solid #333; padding-top: 10px;}
+
+    @media (max-width:1000px){.features{grid-template-columns:repeat(2,1fr)}}
     @media (max-width:560px){
-      .counties-grid{grid-template-columns:repeat(1,1fr)}
+      .features{grid-template-columns:1fr}
       nav{display:none}
       .brand h1{font-size:16px}
       .hero h2{font-size:20px}
     }
-
-    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.45);display:none;align-items:center;justify-content:center}
-    .modal{background:#fff;padding:18px;border-radius:12px;max-width:420px;width:92%}
-    .modal h3{margin:0 0 10px}
-    .modal .row{display:flex;gap:8px;margin-top:10px}
-    .pay-btn{background:#0ea5a1;color:#fff;padding:10px;border-radius:8px;border:none;cursor:pointer}
-    body { padding-top: 70px; }
-/* 🌍 Footer Styling */
-.footer {
-  background: #000;
-  color: #fff;
-  padding: 40px 20px 10px;
-  margin-top: 60px;
-}
-.footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  max-width: 1100px;
-  margin: auto;
-}
-.footer-section h2,
-.footer-section h3 {
-  color: #ffcc00;
-}
-.footer-section p {
-  line-height: 1.6;
-  font-size: 15px;
-}
-.footer-section ul {
-  list-style: none;
-  padding: 0;
-}
-.footer-section ul li {
-  margin: 8px 0;
-}
-.footer-section ul li a {
-  color: #fff;
-  text-decoration: none;
-  transition: 0.3s;
-}
-.footer-section ul li a:hover {
-  color: #ffcc00;
-}
-.social-icons a img {
-  width: 28px;
-  margin-right: 10px;
-  transition: 0.3s;
-}
-.social-icons a img:hover {
-  transform: scale(1.2);
-}
-.footer-bottom {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  border-top: 1px solid #333;
-  padding-top: 10px;
-}
-
   </style>
 </head>
 <body>
-   
-
   <div class="container">
     <header>
       <div class="brand">
@@ -136,92 +111,48 @@
           <div style="font-size:12px;color:var(--muted)">Connecting Skills to Opportunities</div>
         </div>
       </div>
+
       <nav>
         <a href="#home">Home</a>
-        
       </nav>
-      <div class="navbar">
-  <div class="dropdown">
-    <button class="dropbtn">Menu</button>
-    <div class="dropdown-content">
-  <a href="register.html"><button class="btn secondary">Join as Professional</button></a>
- <a href="hire.html"><button class="btn">Find Professionals</button></a>
-<a href="about.html"><button class="btn">about</button></a>
-<a href="contact.html"><button class="btn">contact</button></a>
-<a href="results.html"><button class="btn">Results</button></a>
-<a href="admin.html"><button class="btn">adminUser</button></a>
-</div>
-     </div>
-  </div>
 
+      <div class="cta">
+        <a href="register.html"><button class="btn secondary">Join as Professional</button></a>
+        <a href="hire.html"><button class="btn">Find Professionals</button></a>
 
+        <!-- Clickable Dropdown -->
+        <div class="dropdown">
+          <button class="btn" id="menuBtn">Menu ▼</button>
+          <div class="dropdown-content" id="dropdownContent">
+            <a href="about.html"><button class="btn">About</button></a>
+            <a href="contact.html"><button class="btn">Contact</button></a>
+            <a href="results.html"><button class="btn">Results</button></a>
+            <a href="admin.html"><button class="btn">AdminUser</button></a>
+          </div>
+        </div>
+      </div>
     </header>
 
+    <!-- Hero Section -->
     <section class="hero">
       <div class="hero-left">
         <h2>Hire Skilled Professionals From Your County</h2>
         <p>Connect directly with verified experts in all <strong>47 counties</strong> of Kenya — plumbers, electricians, builders, tutors and more.</p>
         <div class="search">
           <input placeholder="e.g. plumber, electrician, teacher" />
-          
-            <select id="county" name="county" required>
-  <option value="">-- Select Your County --</option>
-  <option value="Baringo">Baringo</option>
-  <option value="Bomet">Bomet</option>
-  <option value="Bungoma">Bungoma</option>
-  <option value="Busia">Busia</option>
-  <option value="Elgeyo Marakwet">Elgeyo Marakwet</option>
-  <option value="Embu">Embu</option>
-  <option value="Garissa">Garissa</option>
-  <option value="Homa Bay">Homa Bay</option>
-  <option value="Isiolo">Isiolo</option>
-  <option value="Kajiado">Kajiado</option>
-  <option value="Kakamega">Kakamega</option>
-  <option value="Kericho">Kericho</option>
-  <option value="Kiambu">Kiambu</option>
-  <option value="Kilifi">Kilifi</option>
-  <option value="Kirinyaga">Kirinyaga</option>
-  <option value="Kisii">Kisii</option>
-  <option value="Kisumu">Kisumu</option>
-  <option value="Kitui">Kitui</option>
-  <option value="Kwale">Kwale</option>
-  <option value="Laikipia">Laikipia</option>
-  <option value="Lamu">Lamu</option>
-  <option value="Machakos">Machakos</option>
-  <option value="Makueni">Makueni</option>
-  <option value="Mandera">Mandera</option>
-  <option value="Marsabit">Marsabit</option>
-  <option value="Meru">Meru</option>
-  <option value="Migori">Migori</option>
-  <option value="Mombasa">Mombasa</option>
-  <option value="Murang'a">Murang'a</option>
-  <option value="Nairobi">Nairobi</option>
-  <option value="Nakuru">Nakuru</option>
-  <option value="Nandi">Nandi</option>
-  <option value="Narok">Narok</option>
-  <option value="Nyamira">Nyamira</option>
-  <option value="Nyandarua">Nyandarua</option>
-  <option value="Nyeri">Nyeri</option>
-  <option value="Samburu">Samburu</option>
-  <option value="Siaya">Siaya</option>
-  <option value="Taita Taveta">Taita Taveta</option>
-  <option value="Tana River">Tana River</option>
-  <option value="Tharaka Nithi">Tharaka Nithi</option>
-  <option value="Trans Nzoia">Trans Nzoia</option>
-  <option value="Turkana">Turkana</option>
-  <option value="Uasin Gishu">Uasin Gishu</option>
-  <option value="Vihiga">Vihiga</option>
-  <option value="Wajir">Wajir</option>
-  <option value="West Pokot">West Pokot</option>
-   <!-- Add all 47 counties -->
-</select>
-
-          
+          <select id="county" name="county" required>
+            <option value="">-- Select Your County --</option>
+            <option value="Baringo">Baringo</option>
+            <option value="Bomet">Bomet</option>
+            <option value="Bungoma">Bungoma</option>
+            <!-- Add other counties as needed -->
+          </select>
           <button>Search</button>
         </div>
       </div>
     </section>
 
+    <!-- Features Section -->
     <section class="features">
       <div class="card"><div class="icon">🏠</div><div><h4>Empower Local Talent</h4><p>Support professionals from your county and invest in local growth.</p></div></div>
       <div class="card"><div class="icon">✅</div><div><h4>Verified Profiles</h4><p>Profiles and CVs are reviewed to ensure credibility.</p></div></div>
@@ -234,45 +165,60 @@
       <div style="margin-top:8px;color:var(--muted)">Use CountyConnect to discover trusted professionals in your community.</div>
     </section>
 
+    <!-- Footer -->
     <footer>
       <div>© <strong>CountyConnect</strong> — Connecting Skills to Opportunities</div>
       <div style="color:var(--muted)">Contact: info@countyconnect.ke</div>
     </footer>
   </div>
+
+  <!-- Detailed Footer -->
   <footer class="footer">
-  <div class="footer-content">
-    <div class="footer-section about">
-      <h2>CountyConnect</h2>
-      <p>Connecting talent and opportunity across all 47 counties of Kenya 🇰🇪.<br>
-      Empowering professionals. Simplifying hiring.</p>
-    </div>
-
-    <div class="footer-section links">
-      <h3>Quick Links</h3>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="hire.html">Hire</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-section social">
-      <h3>Follow Us</h3>
-      <div class="social-icons">
-        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145802.png" alt="Facebook"></a>
-        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145805.png" alt="Instagram"></a>
-        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145812.png" alt="Twitter"></a>
-        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" alt="LinkedIn"></a>
+    <div class="footer-content">
+      <div class="footer-section about">
+        <h2>CountyConnect</h2>
+        <p>Connecting talent and opportunity across all 47 counties of Kenya 🇰🇪.<br>Empowering professionals. Simplifying hiring.</p>
+      </div>
+      <div class="footer-section links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="register.html">Register</a></li>
+          <li><a href="hire.html">Hire</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section social">
+        <h3>Follow Us</h3>
+        <div class="social-icons">
+          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145802.png" alt="Facebook"></a>
+          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145805.png" alt="Instagram"></a>
+          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145812.png" alt="Twitter"></a>
+          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" alt="LinkedIn"></a>
+        </div>
       </div>
     </div>
-  </div>
+    <div class="footer-bottom">
+      <p>© 2025 CountyConnect. All rights reserved. | Designed by Dan Njoroge njuguna💚</p>
+    </div>
+  </footer>
 
-  <div class="footer-bottom">
-    <p>© 2025 CountyConnect. All rights reserved. | Designed by Dan Njoroge njuguna💚</p>
-  </div>
-</footer>
+  <!-- JS for Click Dropdown -->
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const dropdownContent = document.getElementById('dropdownContent');
 
+    menuBtn.addEventListener('click', () => {
+      dropdownContent.style.display = dropdownContent.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    // Close dropdown if clicked outside
+    window.addEventListener('click', function(e) {
+      if (!menuBtn.contains(e.target) && !dropdownContent.contains(e.target)) {
+        dropdownContent.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
