@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CountyConnect | Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: "Poppins", sans-serif; background: #f5f7fa; margin: 0; padding: 0; }
+    header { background: #003399; color: white; text-align: center; padding: 20px; }
+    h1 { margin: 0; }
+    #loginForm, #dashboard { max-width: 800px; margin: 30px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+    button { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+    .approve { background: #009933; color: white; }
+    .delete { background: #ff3333; color: white; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    th { background: #003399; color: white; }
+    img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+    /* Navbar */
+  .navbar{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:8px 20px;background:linear-gradient(90deg,#000,#c00,#fff,#048000);color:#fff;z-index:999}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #fff}
+  .nav-links{display:flex;gap:14px;list-style:none;margin:0;padding:0}
+  .nav-links a{color:#fff;text-decoration:none;font-weight:600}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CountyConnect Admin Dashboard</h1>
+  </header>
+<!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="image24.jpg">
+      <div style="font-weight:800">CountyConnect</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="hire.html">Hire</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Admin Login Form -->
+  <div id="loginForm">
+    <h2>Admin Login</h2>
+    <input type="text" id="adminUser" placeholder="username" required>
+    <input type="password" id="adminPass" placeholder="password" required>
+    <button onclick="loginAdmin()">Login</button>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="dashboard" style="display:none;">
+    <h2>Pending Professional Registrations</h2>
+    <table id="pendingTable">
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Name</th>
+          <th>County</th>
+          <th>Profession</th>
+          <th>Description</th>
+          <th>CV</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+  <script>
+    emailjs.init("YOUR_EMAILJS_USER_ID"); // replace with your EmailJS user ID
+
+    const adminCredentials = { username: "admin", password: "admin123" };
+
+    function loginAdmin(){
+      const user = document.getElementById("adminUser").value.trim();
+      const pass = document.getElementById("adminPass").value.trim();
+      if(user === adminCredentials.username && pass === adminCredentials.password){
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        loadPendingProfiles();
+      } else {
+        alert("Unauthorized access!");
+      }
+    }
+
+    function loadPendingProfiles(){
+      const pending = JSON.parse(localStorage.getItem("pendingProfiles") || "[]");
+      const tbody = document.querySelector("#pendingTable tbody");
+      tbody.innerHTML = "";
+
+      pending.forEach((p, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><img src="${p.photo}" alt="${p.name}"></td>
+          <td>${p.name}</td>
+          <td>${p.county}</td>
+          <td>${p.profession}</td>
+          <td>${p.description}</td>
+          <td><button onclick="viewCV('${index}')">View CV</button></td>
+          <td>
+            <button class="approve" onclick="approveProfile(${index})">Approve</button>
+            <button class="delete" onclick="deleteProfile(${index})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function viewCV(index){
+      const pending = JSON.parse(localStorage.getItem("pendingProfiles") || "[]");
+      const cv = pending[index].cv;
+      window.open(cv, "_blank");
+    }
+
+    function approveProfile(index){
+      const pending = JSON.parse(localStorage.getItem("pendingProfiles") || "[]");
+      const approvedProfile = pending.splice(index,1)[0];
+
+      // Save to approved profiles
+      let profiles = JSON.parse(localStorage.getItem("profiles") || "[]");
+      profiles.push(approvedProfile);
+      localStorage.setItem("profiles", JSON.stringify(profiles));
+
+      // Update pending list
+      localStorage.setItem("pendingProfiles", JSON.stringify(pending));
+      loadPendingProfiles();
+      alert("Profile approved and visible on results page!");
+    }
+
+    function deleteProfile(index){
+      const pending = JSON.parse(localStorage.getItem("pendingProfiles") || "[]");
+      pending.splice(index,1);
+      localStorage.setItem("pendingProfiles", JSON.stringify(pending));
+      loadPendingProfiles();
+      alert("Profile deleted successfully!");
+    }
+
+    // Simulate notification to admin email when a professional registers
+    function sendAdminNotification(profile){
+      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+        to_name: "Admin",
+        from_name: profile.name,
+        profession: profile.profession,
+        county: profile.county,
+        message: `${profile.name} has registered and awaits verification.`
+      }).then(res => {
+        console.log("Notification sent!", res.status);
+      }).catch(err => console.error(err));
+    }
+
+    // Load pending profiles automatically if any (optional)
+    loadPendingProfiles();
+  </script>
+</body>
+</html>
