@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CountyConnect | Register</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: "Poppins", sans-serif; background: #f5f7fa; margin: 0; padding: 0; color: #333; }
+    header { background: linear-gradient(90deg, #003399, #009933, #ff0000); color: white; text-align: center; padding: 20px; }
+    header img { height: 60px; vertical-align: middle; margin-right: 10px; }
+    h1 { display: inline; font-size: 28px; font-weight: 700; }
+    form { max-width: 500px; margin: 30px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+    button { width: 100%; padding: 12px; background: #004d40; color: white; font-size: 16px; border: none; border-radius: 8px; cursor: pointer; }
+    .preview-img { width: 100px; height: 100px; object-fit: cover; margin: 10px 0; border-radius: 50%; }
+    label { font-weight: 600; }
+    /* Navbar */
+  .navbar{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:8px 20px;background:linear-gradient(90deg,#000,#c00,#fff,#048000);color:#fff;z-index:999}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #fff}
+  .nav-links{display:flex;gap:14px;list-style:none;margin:0;padding:0}
+  .nav-links a{color:#fff;text-decoration:none;font-weight:600}
+  </style>
+</head>
+<body>
+  <header>
+
+     <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="image24.jpg">
+      <div style="font-weight:800">CountyConnect</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="hire.html">Hire</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+   
+  </header>
+
+  <form id="registerForm">
+    <label>Full Name</label>
+    <input type="text" id="fullName" placeholder="Enter your full name" required>
+
+    <label>County</label>
+    <select id="countySelect" required>
+      <option value="">Select County</option>
+    </select>
+
+    <label>Profession</label>
+    <select id="professionSelect" required>
+      <option value="">Select Profession</option>
+    </select>
+
+    <label>Short Description</label>
+    <textarea id="description" placeholder="Brief description about your skills" rows="3" required></textarea>
+
+    <label>Profile Photo</label>
+    <input type="file" id="photoInput" accept="image/*" required>
+    <img id="photoPreview" class="preview-img" src="#" alt="Preview" style="display:none;">
+
+    <label>Upload CV (PDF/DOC)</label>
+    <input type="file" id="cvInput" accept=".pdf,.doc,.docx" required>
+
+    <label>
+      <input type="checkbox" id="policyCheck" required>
+      I agree to the CountyConnect Business Policy.
+    </label>
+
+    <button type="submit">Register & Upload</button>
+  </form>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+  <script>
+    emailjs.init("YOUR_EMAILJS_USER_ID"); // replace with your EmailJS user ID
+
+    const counties = [
+      "Baringo","Bomet","Bungoma","Busia","Elgeyo Marakwet","Embu","Garissa","Homa Bay",
+      "Isiolo","Kajiado","Kakamega","Kericho","Kiambu","Kilifi","Kirinyaga","Kisii",
+      "Kisumu","Kitui","Kwale","Laikipia","Lamu","Machakos","Makueni","Mandera","Marsabit",
+      "Meru","Migori","Mombasa","Murang'a","Nairobi","Nakuru","Nandi","Narok","Nyamira",
+      "Nyandarua","Nyeri","Samburu","Siaya","Taita Taveta","Tana River","Tharaka-Nithi",
+      "Trans Nzoia","Turkana","Uasin Gishu","Vihiga","Wajir","West Pokot"
+    ];
+
+    const professions = [
+      "Plumber","Electrician","Carpenter","Teacher","Doctor","Engineer","Mechanic",
+      "Accountant","Chef","Security Guard","Cleaner","Farmer","Driver","Software Developer",
+      "Graphic Designer","Architect","Welder","Receptionist","Event Organizer","Hairdresser"
+    ];
+
+    const countySelect = document.getElementById("countySelect");
+    const professionSelect = document.getElementById("professionSelect");
+    counties.forEach(c => countySelect.innerHTML += `<option value="${c}">${c}</option>`);
+    professions.forEach(p => professionSelect.innerHTML += `<option value="${p}">${p}</option>`);
+
+    const photoInput = document.getElementById("photoInput");
+    const photoPreview = document.getElementById("photoPreview");
+    photoInput.addEventListener("change", function(){
+      const file = this.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = function(e){
+          photoPreview.src = e.target.result;
+          photoPreview.style.display = "block";
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById("registerForm").addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const name = document.getElementById("fullName").value.trim();
+      const county = document.getElementById("countySelect").value;
+      const profession = document.getElementById("professionSelect").value;
+      const description = document.getElementById("description").value.trim();
+      const policyCheck = document.getElementById("policyCheck").checked;
+
+      if(!policyCheck){ alert("You must agree to the policy."); return; }
+
+      const photoFile = photoInput.files[0];
+      const cvFile = document.getElementById("cvInput").files[0];
+      if(!photoFile || !cvFile){ alert("Please upload both photo and CV."); return; }
+
+      const readerPhoto = new FileReader();
+      readerPhoto.onload = function(ePhoto){
+        const photoData = ePhoto.target.result;
+
+        const readerCV = new FileReader();
+        readerCV.onload = function(eCV){
+          const cvData = eCV.target.result;
+
+          // Save to pendingProfiles
+          let pending = JSON.parse(localStorage.getItem("pendingProfiles") || "[]");
+          pending.push({
+            name, county, profession, description, photo: photoData, cv: cvData
+          });
+          localStorage.setItem("pendingProfiles", JSON.stringify(pending));
+
+          // Send notification to admin via EmailJS
+          emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+            to_name: "Admin",
+            from_name: name,
+            profession: profession,
+            county: county,
+            message: `${name} has registered and awaits verification.`
+          }).then(res => console.log("Admin notified!", res.status))
+            .catch(err => console.error(err));
+
+         alert("Profile uploaded successfully! Await admin verification.");
+document.getElementById("registerForm").reset();
+photoPreview.style.display = "none";
+
+        }
+        readerCV.readAsDataURL(cvFile);
+      }
+      readerPhoto.readAsDataURL(photoFile);
+
+    });
+  </script>
+</body>
+</html>
