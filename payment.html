@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment - CountyConnect</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f8f9fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: linear-gradient(90deg, #000, #ff0000, #006600);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .container {
+      background: white;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    h2 {
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    select, input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 4px #007bff;
+    }
+
+    .btn {
+      background: linear-gradient(90deg, #000, #ff0000, #006600);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      cursor: pointer;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: linear-gradient(90deg, #006600, #ff0000, #000);
+    }
+
+    footer {
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .success {
+      background: #e6ffe6;
+      border: 1px solid #008000;
+      color: #006400;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+      /* Navbar */
+  .navbar{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:8px 20px;background:linear-gradient(90deg,#000,#c00,#fff,#048000);color:#fff;z-index:999}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #fff}
+  .nav-links{display:flex;gap:14px;list-style:none;margin:0;padding:0}
+  .nav-links a{color:#fff;text-decoration:none;font-weight:600}
+  </style>
+</head>
+
+<body>
+<head>
+    <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="image24.jpg">
+      <div style="font-weight:800">CountyConnect</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="hire.html">Hire</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</head>
+  <header>
+
+    <h1>CountyConnect – Secure Payment</h1>
+  </header>
+
+  <div class="container">
+    <h2>Payment Details</h2>
+    <p id="userEmailDisplay"></p>
+
+    <label for="method"><strong>Select Payment Method:</strong></label><br>
+    <select id="method" onchange="togglePaymentInputs()">
+      <option value="">--Select--</option>
+      <option value="mpesa">Mpesa</option>
+      <option value="bank">Bank Transfer</option>
+    </select>
+
+    <!-- Mpesa Section -->
+    <div id="mpesaSection" class="hidden">
+      <label for="mpesaNumber"><strong>Mpesa Number:</strong></label><br>
+      <input type="text" id="mpesaNumber" placeholder="e.g. 07XXXXXXXX" maxlength="10" />
+    </div>
+
+    <!-- Bank Section -->
+    <div id="bankSection" class="hidden">
+      <label for="bankName"><strong>Select Your Bank:</strong></label><br>
+      <select id="bankName">
+        <option value="">--Select Bank--</option>
+        <option value="KCB">Kenya Commercial Bank (KCB)</option>
+        <option value="Equity">Equity Bank</option>
+        <option value="Cooperative">Cooperative Bank</option>
+        <option value="Absa">Absa Bank Kenya</option>
+        <option value="Family">Family Bank</option>
+        <option value="Stanbic">Stanbic Bank</option>
+        <option value="DTB">Diamond Trust Bank (DTB)</option>
+      </select>
+
+      <label for="bankAccount"><strong>Bank Account Number:</strong></label><br>
+      <input type="text" id="bankAccount" placeholder="e.g. 1234567890" />
+    </div>
+
+    <button class="btn" onclick="processPayment()">Pay Now</button>
+
+    <div id="successMsg" class="success hidden">
+      ✅ Payment successful!  
+      <br>Contact details have been sent to your registered email.
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 CountyConnect | Empowering Kenyan Talent 🇰🇪</p>
+  </footer>
+
+  <script>
+    // Show user's email
+    const userEmail = localStorage.getItem("userEmail");
+    document.getElementById("userEmailDisplay").innerHTML = userEmail
+      ? `Proceeding as <strong>${userEmail}</strong>`
+      : "⚠️ No user found. Please go back and register.";
+
+    // Toggle payment sections
+    function togglePaymentInputs() {
+      const method = document.getElementById("method").value;
+      document.getElementById("mpesaSection").classList.add("hidden");
+      document.getElementById("bankSection").classList.add("hidden");
+
+      if (method === "mpesa") {
+        document.getElementById("mpesaSection").classList.remove("hidden");
+      } else if (method === "bank") {
+        document.getElementById("bankSection").classList.remove("hidden");
+      }
+    }
+
+    // Process payment validation
+    function processPayment() {
+      const method = document.getElementById("method").value;
+
+      if (method === "mpesa") {
+        const num = document.getElementById("mpesaNumber").value.trim();
+        if (!/^07\d{8}$/.test(num)) {
+          alert("⚠️ Please enter a valid Mpesa number (e.g. 07XXXXXXXX)");
+          return;
+        }
+      } else if (method === "bank") {
+        const bank = document.getElementById("bankName").value;
+        const acc = document.getElementById("bankAccount").value.trim();
+
+        if (!bank) {
+          alert("⚠️ Please select your bank.");
+          return;
+        }
+        if (acc.length < 6) {
+          alert("⚠️ Please enter a valid bank account number.");
+          return;
+        }
+      } else {
+        alert("⚠️ Please select a payment method first.");
+        return;
+      }
+
+      document.getElementById("successMsg").classList.remove("hidden");
+      localStorage.removeItem("userEmail"); // clear after payment
+    }
+  </script>
+</body>
+</html>
