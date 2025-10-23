@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CountyConnect | Results</title>
+  <style>
+    :root{--accent:#003399;--accent2:#009933;--muted:#666}
+    body{font-family:Inter,system-ui,Arial;margin:0;background:#f5f7fa;color:#111}
+    header{background:linear-gradient(90deg,var(--accent),#009933,#ff0000);color:#fff;padding:18px;text-align:center}
+    header img{height:52px;vertical-align:middle;margin-right:10px}
+    .filters{padding:18px;text-align:center}
+    select{padding:10px;margin:8px;border-radius:8px;border:1px solid #d1d5db}
+    .profiles{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;padding:18px}
+    .card{background:#fff;border-radius:10px;width:280px;padding:14px;box-shadow:0 6px 18px rgba(2,6,23,0.06);text-align:center}
+    .card img{width:100%;height:180px;object-fit:cover;border-radius:8px}
+    .card h3{color:var(--accent);margin:12px 0 6px}
+    .card p{color:var(--muted);font-size:14px;margin:6px 0}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    .view-btn{background:#0099cc;color:#fff}
+    .hire-btn{background:var(--accent2);color:#fff}
+    footer{background:#111;color:#fff;padding:24px;text-align:center;margin-top:22px}
+
+    /* Fullscreen CV Modal */
+    .cv-modal {display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);align-items:center;justify-content:center;z-index:1200;overflow:auto;animation:modalIn .2s}
+    .cv-modal.show{display:flex}
+    .cv-box{background:#fff;width:92%;height:92%;border-radius:10px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+    .cv-iframe{flex:1;border:none;width:100%}
+    .cv-header{display:flex;justify-content:flex-end;padding:8px;background:#fff}
+    .close-btn{background:#ff3333;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
+    .cv-note{padding:16px;text-align:center;color:var(--muted)}
+
+    @keyframes modalIn{from{opacity:0}to{opacity:1}}
+
+    /* Hire popup (white box) */
+    .hire-popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:1300}
+    .hire-popup.show{display:flex}
+    .hire-box{background:#fff;border-radius:10px;padding:20px;width:360px;box-shadow:0 8px 30px rgba(0,0,0,0.2);text-align:center}
+    .hire-box h3{margin:0 0 12px;color:var(--accent)}
+    .hire-box input{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #ddd}
+    .hire-box .small{font-size:13px;color:var(--muted);margin-top:8px}
+    .hidden{display:none!important}
+
+    /* small responsive */
+    @media (max-width:520px){
+      .card{width:92%}
+      .cv-box{height:95%}
+    }
+     /* Navbar */
+  .navbar{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:8px 20px;background:linear-gradient(90deg,#000,#c00,#fff,#048000);color:#fff;z-index:999}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #fff}
+  .nav-links{display:flex;gap:14px;list-style:none;margin:0;padding:0}
+  .nav-links a{color:#fff;text-decoration:none;font-weight:600}
+  </style>
+</head>
+<body>
+
+<header>
+   <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="image24.jpg">
+      <div style="font-weight:800">CountyConnect</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="hire.html">Hire</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+<header>
+<div class="filters">
+  designed for quick search 
+  <select id="countySelect"><option value="">All Counties</option></select>
+  <select id="professionSelect"><option value="">All Professions</option></select>
+  <button class="btn view-btn" onclick="filterProfiles()">Search</button>
+</div>
+</header>
+<div class="profiles" id="profilesContainer"></div>
+
+<!-- Fullscreen CV modal -->
+<div id="cvModal" class="cv-modal" aria-hidden="true">
+  <div class="cv-box" role="dialog" aria-modal="true">
+    <div class="cv-header">
+      <button class="close-btn" id="cvClose">Close</button>
+    </div>
+    <!-- dynamic content area -->
+    <div id="cvContent" style="flex:1;display:flex;flex-direction:column;">
+      <!-- If viewable PDF/URL -->
+      <iframe id="cvFrame" class="cv-iframe" src=""></iframe>
+
+      <!-- If not directly viewable (DOCX base64 etc.) -->
+      <div id="cvFallback" class="cv-note hidden">
+        This file cannot be previewed in the browser. <br/>
+        <a id="cvDownload" href="#" download>Download CV</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hire white popup -->
+<div id="hirePopup" class="hire-popup" aria-hidden="true">
+  <div class="hire-box">
+    <h3>Register to Hire</h3>
+    <input type="email" id="hireEmail" placeholder="Valid email" />
+    <input type="password" id="hirePassword" placeholder="Password (min 6 chars)" />
+    <button id="hireVerifyBtn" class="btn" style="background:var(--accent);color:#fff">Verify & Proceed</button>
+    <div id="hireMessage" class="small" style="display:none;margin-top:10px;color:var(--muted)"></div>
+    <button id="hireClose" class="btn" style="margin-top:12px;background:#ddd">Cancel</button>
+  </div>
+</div>
+
+<footer>© 2025 CountyConnect — All rights reserved</footer>
+
+<script>
+/* ---------------------------
+   Setup: counties + professions
+   --------------------------- */
+const ALL_COUNTIES = [
+  "Baringo","Bomet","Bungoma","Busia","Elgeyo Marakwet","Embu","Garissa","Homa Bay","Isiolo","Kajiado",
+  "Kakamega","Kericho","Kiambu","Kilifi","Kirinyaga","Kisii","Kisumu","Kitui","Kwale","Laikipia","Lamu",
+  "Machakos","Makueni","Mandera","Marsabit","Meru","Migori","Mombasa","Murang'a","Nairobi","Nakuru","Nandi",
+  "Narok","Nyamira","Nyandarua","Nyeri","Samburu","Siaya","Taita Taveta","Tana River","Tharaka-Nithi",
+  "Trans Nzoia","Turkana","Uasin Gishu","Vihiga","Wajir","West Pokot"
+];
+
+const ALL_PROFESSIONS = [
+  "Plumber","Electrician","Carpenter","Teacher","Doctor","Engineer","Mechanic",
+  "Accountant","Chef","Security Guard","Cleaner","Farmer","Driver","Software Developer",
+  "Graphic Designer","Architect","Welder","Receptionist","Event Organizer","Hairdresser"
+];
+
+const countySelect = document.getElementById('countySelect');
+const professionSelect = document.getElementById('professionSelect');
+const profilesContainer = document.getElementById('profilesContainer');
+
+ALL_COUNTIES.forEach(c => countySelect.insertAdjacentHTML('beforeend', `<option value="${c}">${c}</option>`));
+ALL_PROFESSIONS.forEach(p => professionSelect.insertAdjacentHTML('beforeend', `<option value="${p}">${p}</option>`));
+
+/* ---------------------------
+   Sample data (fallback) and loader
+   --------------------------- */
+const sampleProfiles = [
+  { name:"John Mwangi", county:"Nairobi", profession:"Plumber", description:"Certified plumber with 5 years experience", photo:"https://i.pravatar.cc/420?img=12", cv:"https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+  { name:"Mary Wanjiru", county:"Kiambu", profession:"Teacher", description:"Qualified teacher specialized in Mathematics", photo:"https://i.pravatar.cc/420?img=47", cv:"https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+  { name:"Peter Otieno", county:"Kisumu", profession:"Electrician", description:"Expert in electrical installations", photo:"https://i.pravatar.cc/420?img=33", cv:"https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+];
+
+function loadProfiles(){
+  try{
+    const stored = JSON.parse(localStorage.getItem('profiles') || '[]');
+    return (Array.isArray(stored) && stored.length) ? stored : sampleProfiles;
+  }catch(e){
+    return sampleProfiles;
+  }
+}
+
+/* ---------------------------
+   Display
+   --------------------------- */
+function displayProfiles(list){
+  profilesContainer.innerHTML = '';
+  if(!list.length){
+    profilesContainer.innerHTML = `<p style="color:${getComputedStyle(document.body).color};">No professionals found.</p>`;
+    return;
+  }
+  list.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card">
+        <img src="${p.photo||'https://i.pravatar.cc/420'}" alt="${escapeHtml(p.name)}">
+        <h3>${escapeHtml(p.name)}</h3>
+        <p><strong>${escapeHtml(p.profession)}</strong> | ${escapeHtml(p.county)}</p>
+        <p>${escapeHtml(p.description || '')}</p>
+        <div style="margin-top:10px">
+          <button class="btn view-btn" data-cv="${encodeURIComponent(p.cv||'')}" aria-label="View CV">View CV</button>
+          <button class="btn hire-btn" data-name="${escapeHtml(p.name)}" data-prof="${escapeHtml(p.profession)}">Hire</button>
+        </div>
+      </div>
+    `;
+    profilesContainer.appendChild(card);
+  });
+
+  // attach event handlers for view and hire (delegation could also be used)
+  profilesContainer.querySelectorAll('.view-btn').forEach(b=>{
+    b.addEventListener('click', (e)=>{
+      const raw = decodeURIComponent(e.currentTarget.getAttribute('data-cv')||'');
+      openCvModal(raw);
+    });
+  });
+  profilesContainer.querySelectorAll('.hire-btn').forEach(b=>{
+    b.addEventListener('click', (e)=>{
+      const name = e.currentTarget.getAttribute('data-name');
+      const prof = e.currentTarget.getAttribute('data-prof');
+      openHirePopup(name, prof);
+    });
+  });
+}
+
+/* ---------------------------
+   Filter logic
+   --------------------------- */
+function filterProfiles(){
+  const county = (countySelect.value||'').trim();
+  const profession = (professionSelect.value||'').trim();
+  const all = loadProfiles();
+  const filtered = all.filter(p => {
+    return (!county || p.county === county) && (!profession || p.profession === profession);
+  });
+  displayProfiles(filtered);
+}
+
+/* ---------------------------
+   CV modal logic (preview vs download)
+   --------------------------- */
+const cvModal = document.getElementById('cvModal');
+const cvFrame = document.getElementById('cvFrame');
+const cvFallback = document.getElementById('cvFallback');
+const cvDownload = document.getElementById('cvDownload');
+
+function openCvModal(cvLink){
+  // sanitize
+  if(!cvLink){
+    alert('No CV found for this profile.');
+    return;
+  }
+
+  // disable page scroll while modal open
+  document.body.style.overflow = 'hidden';
+
+  // handle data:base64 and URLs
+  try{
+    // if it's a base64 data URL
+    if(cvLink.startsWith('data:')){
+      // check MIME type
+      if(cvLink.includes('application/pdf')){
+        cvFrame.src = cvLink;
+        showCvIframe();
+      } else {
+        // not a pdf base64 (likely doc/docx) -> offer download
+        cvFrame.src = '';
+        showFallbackForBase64(cvLink);
+      }
+    } else {
+      // it's a URL (could be pdf or doc)
+      const lower = cvLink.toLowerCase();
+      if(lower.endsWith('.pdf')){
+        cvFrame.src = cvLink;
+        showCvIframe();
+      } else {
+        // try Google Docs viewer for non-pdf public URLs
+        const gview = `https://docs.google.com/gview?url=${encodeURIComponent(cvLink)}&embedded=true`;
+        cvFrame.src = gview;
+        showCvIframe();
+      }
+    }
+  }catch(err){
+    // fallback: offer download
+    showFallbackForUrl(cvLink);
+  }
+  cvModal.classList.add('show');
+  cvModal.setAttribute('aria-hidden','false');
+}
+
+function showCvIframe(){
+  cvFrame.style.display = 'block';
+  cvFallback.classList.add('hidden');
+}
+function showFallbackForBase64(dataUrl){
+  cvFrame.style.display = 'none';
+  cvFallback.classList.remove('hidden');
+  // make download link use the base64 data with a suggested filename
+  cvDownload.href = dataUrl;
+  cvDownload.setAttribute('download','cv-upload');
+  cvDownload.textContent = 'Download CV';
+}
+function showFallbackForUrl(url){
+  cvFrame.style.display = 'none';
+  cvFallback.classList.remove('hidden');
+  cvDownload.href = url;
+  cvDownload.textContent = 'Open / Download CV';
+  cvDownload.removeAttribute('download');
+}
+
+document.getElementById('cvClose').addEventListener('click', closeCvModal);
+function closeCvModal(){
+  cvModal.classList.remove('show');
+  cvModal.setAttribute('aria-hidden','true');
+  cvFrame.src = '';
+  document.body.style.overflow = 'auto';
+}
+
+/* ---------------------------
+   Hire popup logic (white box) - email+password only
+   --------------------------- */
+const hirePopup = document.getElementById('hirePopup');
+const hireEmail = document.getElementById('hireEmail');
+const hirePassword = document.getElementById('hirePassword');
+const hireVerifyBtn = document.getElementById('hireVerifyBtn');
+const hireClose = document.getElementById('hireClose');
+const hireMessage = document.getElementById('hireMessage');
+
+function openHirePopup(name, profession){
+  // save selected candidate for payment page
+  localStorage.setItem('selectedHire', JSON.stringify({ name, profession }));
+  hireMessage.style.display = 'none';
+  hireEmail.value = '';
+  hirePassword.value = '';
+  hirePopup.classList.add('show');
+  hirePopup.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+}
+
+hireClose.addEventListener('click', closeHirePopup);
+function closeHirePopup(){
+  hirePopup.classList.remove('show');
+  hirePopup.setAttribute('aria-hidden','true');
+  document.body.style.overflow = 'auto';
+}
+
+/* On verify: validate and only then redirect to payment */
+hireVerifyBtn.addEventListener('click', ()=>{
+  const email = (hireEmail.value||'').trim();
+  const pwd = (hirePassword.value||'').trim();
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if(!emailPattern.test(email)){
+    hireMessage.style.display = 'block';
+    hireMessage.textContent = 'Please enter a valid email address.';
+    return;
+  }
+  if(pwd.length < 6){
+    hireMessage.style.display = 'block';
+    hireMessage.textContent = 'Password must be at least 6 characters.';
+    return;
+  }
+
+  // Save minimal employer credential locally (for demo only).
+  localStorage.setItem('employer', JSON.stringify({ email, createdAt: new Date().toISOString() }));
+
+  // proceed to payment page
+  closeHirePopup();
+  // selectedHire already saved earlier; payment page can retrieve it
+  window.location.href = 'payment.html';
+});
+
+/* ---------------------------
+   Utilities and initial load
+   --------------------------- */
+function escapeHtml(str){ return String(str||'').replace(/[&<>"'`]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',"`":'&#96;'})[s]); }
+
+/* On page load render stored/samples */
+displayProfiles(loadProfiles());
+
+/* Accessibility: close modal via ESC */
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape'){
+    if(document.getElementById('cvModal').classList.contains('show')) closeCvModal();
+    if(document.getElementById('hirePopup').classList.contains('show')) closeHirePopup();
+  }
+});
+</script>
+</body>
+</html>
