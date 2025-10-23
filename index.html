@@ -12,91 +12,114 @@
       --card-bg: #fff;
       --glass: rgba(255,255,255,0.85);
       --max-width:1100px;
-      --hero-height:420px;
       font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,#f8fafc, #eef2f6);color:#0f172a; padding-top: 70px;}
+    body{margin:0;background:linear-gradient(180deg,#f8fafc, #eef2f6);color:#0f172a;padding-top:70px}
     .container{max-width:var(--max-width);margin:0 auto;padding:24px}
 
-    header{display:flex;align-items:center;justify-content:space-between;padding:12px 0;position:relative; z-index:1000;}
+    /* Header */
+    header{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 0;
+      gap:8px;
+    }
     .brand{display:flex;align-items:center;gap:12px}
     .brand img{height:56px;width:56px;object-fit:contain;border-radius:8px}
     .brand h1{font-size:20px;margin:0}
     nav a{margin-left:18px;text-decoration:none;color:var(--muted);font-weight:600}
-    .cta{display:flex;gap:10px;align-items:center}
+
+    /* CTA Buttons */
+    .cta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
     .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
     .btn.secondary{background:transparent;color:var(--accent);border:2px solid var(--accent)}
 
-    /* Dropdown Styles */
-    .dropdown {
-      position: relative;
-      display: inline-block;
+    /* Dropdown Menu */
+    .dropdown{
+      position:relative;
+      display:inline-block;
+      width:auto;
     }
-    .dropdown .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-      min-width: 160px;
-      z-index: 10;
-      flex-direction: column;
-      padding: 0;
+    .dropdown-content{
+      display:none;
+      position:absolute;
+      top:100%;
+      left:0;
+      background:var(--card-bg);
+      border-radius:10px;
+      box-shadow:0 6px 12px rgba(0,0,0,0.15);
+      z-index:10;
+      flex-direction:column;
+      min-width:180px;
     }
-    .dropdown .dropdown-content a button {
-      width: 100%;
-      padding: 10px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 0;
-      margin: 0;
-      text-align: left;
-      cursor: pointer;
+    .dropdown-content a{
+      text-decoration:none;
+      color:var(--muted);
+      padding:10px 14px;
+      display:block;
+      font-weight:600;
     }
-    .dropdown .dropdown-content a button:hover {
-      background: var(--accent-dark);
+    .dropdown-content a:hover{
+      background:var(--accent);
+      color:#fff;
+    }
+    .dropdown.open .dropdown-content{
+      display:flex;
     }
 
-    .hero{background:linear-gradient(90deg, rgba(3,82,54,0.95), rgba(9,121,72,0.85));color:#fff;border-radius:14px;padding:28px;margin:18px 0;display:flex;gap:24px;align-items:center}
+    /* Hero */
+    .hero{background:linear-gradient(90deg, rgba(3,82,54,0.95), rgba(9,121,72,0.85));color:#fff;border-radius:14px;padding:28px;margin:18px 0;display:flex;gap:24px;align-items:center;flex-wrap:wrap}
     .hero-left{flex:1}
     .hero h2{font-size:28px;margin:0 0 8px}
     .hero p{margin:0 0 18px;color:rgba(255,255,255,0.92)}
-    .search{display:flex;gap:12px;align-items:center}
-    .search input,.search select{padding:12px;border-radius:10px;border:0;min-width:180px}
+    .search{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+    .search input,.search select{padding:12px;border-radius:10px;border:0;min-width:180px;flex:1}
     .search button{padding:12px 18px;border-radius:10px;border:none;background:#ffd166;color:#000;font-weight:800;cursor:pointer}
 
+    /* Features */
     .features{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
     .card{background:var(--card-bg);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(12,13,14,0.06);display:flex;gap:12px;align-items:center}
     .icon{height:44px;width:44px;border-radius:10px;display:grid;place-items:center;background:#f3f4f6;font-weight:800}
     .card h4{margin:0;font-size:15px}
     .card p{margin:6px 0 0;color:var(--muted);font-size:13px}
 
+    /* Quote */
     .quote{background:linear-gradient(90deg,#fff,#f7fff8);padding:18px;border-radius:12px;border-left:6px solid var(--accent);margin:18px 0}
 
-    footer{margin-top:24px;padding:18px 0;border-top:1px solid #e6eef5;color:var(--muted);display:flex;justify-content:space-between}
+    /* Footer */
+    footer{margin-top:24px;padding:18px 0;border-top:1px solid #e6eef5;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+    .footer{background:#000;color:#fff;padding:40px 20px 10px;margin-top:60px}
+    .footer-content{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;max-width:1100px;margin:auto}
+    .footer-section h2,.footer-section h3{color:#ffcc00}
+    .footer-section p{line-height:1.6;font-size:15px}
+    .footer-section ul{list-style:none;padding:0}
+    .footer-section ul li{margin:8px 0}
+    .footer-section ul li a{color:#fff;text-decoration:none;transition:0.3s}
+    .footer-section ul li a:hover{color:#ffcc00}
+    .social-icons a img{width:28px;margin-right:10px;transition:0.3s}
+    .social-icons a img:hover{transform:scale(1.2)}
+    .footer-bottom{text-align:center;margin-top:20px;font-size:14px;border-top:1px solid #333;padding-top:10px}
 
-    /* Footer Styling */
-    .footer {background: #000; color: #fff; padding: 40px 20px 10px; margin-top: 60px;}
-    .footer-content {display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1100px; margin: auto;}
-    .footer-section h2, .footer-section h3 {color: #ffcc00;}
-    .footer-section p {line-height: 1.6; font-size: 15px;}
-    .footer-section ul {list-style: none; padding: 0;}
-    .footer-section ul li {margin: 8px 0;}
-    .footer-section ul li a {color: #fff; text-decoration: none; transition: 0.3s;}
-    .footer-section ul li a:hover {color: #ffcc00;}
-    .social-icons a img {width: 28px; margin-right: 10px; transition: 0.3s;}
-    .social-icons a img:hover {transform: scale(1.2);}
-    .footer-bottom {text-align: center; margin-top: 20px; font-size: 14px; border-top: 1px solid #333; padding-top: 10px;}
-
-    @media (max-width:1000px){.features{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:560px){
-      .features{grid-template-columns:1fr}
+    /* Responsive */
+    @media(max-width:1000px){
+      .features{grid-template-columns:repeat(2,1fr)}
+      .counties-grid{grid-template-columns:repeat(2,1fr)}
+      .hero{flex-direction:column;align-items:flex-start}
+    }
+    @media(max-width:560px){
+      header{flex-direction:column;align-items:flex-start}
       nav{display:none}
-      .brand h1{font-size:16px}
+      .cta{width:100%;flex-direction:column}
+      .cta .btn,.dropdown button{width:100%;box-sizing:border-box}
+      .dropdown-content{position:relative;width:100%;left:0}
+      .features{grid-template-columns:1fr 1fr}
       .hero h2{font-size:20px}
     }
   </style>
@@ -105,25 +128,19 @@
   <div class="container">
     <header>
       <div class="brand">
-        <img src="image24.jpg" />
+        <img src="image24.jpg"/>
         <div>
           <h1>CountyConnect</h1>
           <div style="font-size:12px;color:var(--muted)">Connecting Skills to Opportunities</div>
         </div>
       </div>
-
-      <nav>
-        <a href="#home">Home</a>
-      </nav>
-
+      <nav><a href="#home">Home</a></nav>
       <div class="cta">
         <a href="register.html"><button class="btn secondary">Join as Professional</button></a>
         <a href="hire.html"><button class="btn">Find Professionals</button></a>
-
-        <!-- Clickable Dropdown -->
         <div class="dropdown">
-          <button class="btn" id="menuBtn">Menu ▼</button>
-          <div class="dropdown-content" id="dropdownContent">
+          <button class="btn" onclick="toggleDropdown()">Menu ▼</button>
+          <div class="dropdown-content">
             <a href="about.html"><button class="btn">About</button></a>
             <a href="contact.html"><button class="btn">Contact</button></a>
             <a href="results.html"><button class="btn">Results</button></a>
@@ -139,13 +156,56 @@
         <h2>Hire Skilled Professionals From Your County</h2>
         <p>Connect directly with verified experts in all <strong>47 counties</strong> of Kenya — plumbers, electricians, builders, tutors and more.</p>
         <div class="search">
-          <input placeholder="e.g. plumber, electrician, teacher" />
+          <input placeholder="e.g. plumber, electrician, teacher"/>
           <select id="county" name="county" required>
             <option value="">-- Select Your County --</option>
             <option value="Baringo">Baringo</option>
             <option value="Bomet">Bomet</option>
             <option value="Bungoma">Bungoma</option>
-            <!-- Add other counties as needed -->
+            <option value="Busia">Busia</option>
+            <option value="Elgeyo Marakwet">Elgeyo Marakwet</option>
+            <option value="Embu">Embu</option>
+            <option value="Garissa">Garissa</option>
+            <option value="Homa Bay">Homa Bay</option>
+            <option value="Isiolo">Isiolo</option>
+            <option value="Kajiado">Kajiado</option>
+            <option value="Kakamega">Kakamega</option>
+            <option value="Kericho">Kericho</option>
+            <option value="Kiambu">Kiambu</option>
+            <option value="Kilifi">Kilifi</option>
+            <option value="Kirinyaga">Kirinyaga</option>
+            <option value="Kisii">Kisii</option>
+            <option value="Kisumu">Kisumu</option>
+            <option value="Kitui">Kitui</option>
+            <option value="Kwale">Kwale</option>
+            <option value="Laikipia">Laikipia</option>
+            <option value="Lamu">Lamu</option>
+            <option value="Machakos">Machakos</option>
+            <option value="Makueni">Makueni</option>
+            <option value="Mandera">Mandera</option>
+            <option value="Marsabit">Marsabit</option>
+            <option value="Meru">Meru</option>
+            <option value="Migori">Migori</option>
+            <option value="Mombasa">Mombasa</option>
+            <option value="Murang'a">Murang'a</option>
+            <option value="Nairobi">Nairobi</option>
+            <option value="Nakuru">Nakuru</option>
+            <option value="Nandi">Nandi</option>
+            <option value="Narok">Narok</option>
+            <option value="Nyamira">Nyamira</option>
+            <option value="Nyandarua">Nyandarua</option>
+            <option value="Nyeri">Nyeri</option>
+            <option value="Samburu">Samburu</option>
+            <option value="Siaya">Siaya</option>
+            <option value="Taita Taveta">Taita Taveta</option>
+            <option value="Tana River">Tana River</option>
+            <option value="Tharaka Nithi">Tharaka Nithi</option>
+            <option value="Trans Nzoia">Trans Nzoia</option>
+            <option value="Turkana">Turkana</option>
+            <option value="Uasin Gishu">Uasin Gishu</option>
+            <option value="Vihiga">Vihiga</option>
+            <option value="Wajir">Wajir</option>
+            <option value="West Pokot">West Pokot</option>
           </select>
           <button>Search</button>
         </div>
@@ -160,65 +220,60 @@
       <div class="card"><div class="icon">💸</div><div><h4>Transparent Pricing</h4><p>Pay only when you hire — secure M-PESA or card payments.</p></div></div>
     </section>
 
+    <!-- Quote Section -->
     <section class="quote">
       <strong>“Building Kenya, one county at a time — connecting skills to opportunities.”</strong>
       <div style="margin-top:8px;color:var(--muted)">Use CountyConnect to discover trusted professionals in your community.</div>
     </section>
 
     <!-- Footer -->
-    <footer>
-      <div>© <strong>CountyConnect</strong> — Connecting Skills to Opportunities</div>
-      <div style="color:var(--muted)">Contact: info@countyconnect.ke</div>
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section about">
+          <h2>CountyConnect</h2>
+          <p>Connecting talent and opportunity across all 47 counties of Kenya 🇰🇪.<br>
+          Empowering professionals. Simplifying hiring.</p>
+        </div>
+
+        <div class="footer-section links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="hire.html">Hire</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section social">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145802.png" alt="Facebook"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145805.png" alt="Instagram"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145812.png" alt="Twitter"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" alt="LinkedIn"></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 CountyConnect. All rights reserved. | Designed by Dan Njoroge njuguna💚</p>
+      </div>
     </footer>
   </div>
 
-  <!-- Detailed Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section about">
-        <h2>CountyConnect</h2>
-        <p>Connecting talent and opportunity across all 47 counties of Kenya 🇰🇪.<br>Empowering professionals. Simplifying hiring.</p>
-      </div>
-      <div class="footer-section links">
-        <h3>Quick Links</h3>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="register.html">Register</a></li>
-          <li><a href="hire.html">Hire</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-section social">
-        <h3>Follow Us</h3>
-        <div class="social-icons">
-          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145802.png" alt="Facebook"></a>
-          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145805.png" alt="Instagram"></a>
-          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145812.png" alt="Twitter"></a>
-          <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" alt="LinkedIn"></a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2025 CountyConnect. All rights reserved. | Designed by Dan Njoroge njuguna💚</p>
-    </div>
-  </footer>
-
-  <!-- JS for Click Dropdown -->
   <script>
-    const menuBtn = document.getElementById('menuBtn');
-    const dropdownContent = document.getElementById('dropdownContent');
-
-    menuBtn.addEventListener('click', () => {
-      dropdownContent.style.display = dropdownContent.style.display === 'flex' ? 'none' : 'flex';
-    });
-
-    // Close dropdown if clicked outside
-    window.addEventListener('click', function(e) {
-      if (!menuBtn.contains(e.target) && !dropdownContent.contains(e.target)) {
-        dropdownContent.style.display = 'none';
+    function toggleDropdown(){
+      const dropdown = document.querySelector('.dropdown');
+      dropdown.classList.toggle('open');
+    }
+    window.onclick = function(event){
+      if(!event.target.matches('.dropdown button')){
+        const dropdowns = document.querySelectorAll('.dropdown');
+        dropdowns.forEach(dropdown => dropdown.classList.remove('open'));
       }
-    });
+    }
   </script>
 </body>
 </html>
